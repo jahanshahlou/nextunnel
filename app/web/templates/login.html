@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NexTunnel — ورود</title>
+<link rel="icon" type="image/svg+xml" href="/static/img/logo.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="auth-wrap">
+  <div class="card auth-card fade">
+    <div class="auth-logo"><img src="/static/img/logo.svg" alt="NexTunnel"></div>
+    <h1 style="text-align:center;font-size:20px;margin-bottom:2px">NexTunnel</h1>
+    <p class="muted center" style="margin-bottom:20px">پنل مدیریت سرور</p>
+    <form id="login-form">
+      <div class="field">
+        <label>رمز عبور</label>
+        <input type="password" id="password" autocomplete="current-password" autofocus>
+      </div>
+      <button class="btn btn-primary btn-block mt" type="submit">ورود</button>
+    </form>
+    <p id="error" class="center muted mt" style="color:var(--danger)"></p>
+  </div>
+</div>
+<script>
+const f = document.getElementById("login-form");
+f.addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = document.getElementById("error");
+  err.textContent = "";
+  try {
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: document.getElementById("password").value }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail || "ورود ناموفق");
+    location.href = "/";
+  } catch (ex) {
+    err.textContent = ex.message;
+  }
+});
+</script>
+</body>
+</html>

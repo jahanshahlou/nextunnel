@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NexTunnel — پنل مدیریت</title>
+<link rel="icon" type="image/svg+xml" href="/static/img/logo.svg">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="/static/img/logo.svg" alt="">
+      <div><b>NexTunnel</b><div class="muted" style="font-size:11px">پنل مدیریت</div></div>
+    </div>
+    <nav>
+      <button class="nav-item" data-nav="overview">داشبورد</button>
+      <button class="nav-item" data-nav="links">کانفیگ‌ها</button>
+      <button class="nav-item" data-nav="groups">گروه‌ها</button>
+      <button class="nav-item" data-nav="connections">اتصالات</button>
+      <button class="nav-item" data-nav="bot">ربات تلگرام</button>
+      <button class="nav-item" data-nav="settings">تنظیمات</button>
+    </nav>
+    <div class="foot">
+      <button class="nav-item" id="logout" style="color:var(--danger)">خروج</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section data-page="overview"></section>
+    <section data-page="links" style="display:none"></section>
+    <section data-page="groups" style="display:none"></section>
+    <section data-page="connections" style="display:none"></section>
+    <section data-page="bot" style="display:none"></section>
+    <section data-page="settings" style="display:none"></section>
+  </main>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav-item" data-nav="overview">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 9h18M9 21V9"/></svg>
+    داشبورد
+  </button>
+  <button class="nav-item" data-nav="links">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+    کانفیگ‌ها
+  </button>
+  <button class="nav-item" data-nav="groups">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13A4 4 0 0 1 16 11"/></svg>
+    گروه‌ها
+  </button>
+  <button class="nav-item" data-nav="connections">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg>
+    اتصالات
+  </button>
+  <button class="nav-item" data-nav="bot">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2h4v4h4v12H2V8h4V4h4a2 2 0 0 1 2-2z"/><path d="M8 13h8M8 17h6"/></svg>
+    ربات
+  </button>
+</nav>
+
+<script src="/static/js/app.js"></script>
+<script>
+(async () => {
+  try {
+    const s = await fetch("/api/session");
+    const d = await s.json();
+    if (!d.authenticated) { location.href = "/login"; return; }
+    await initDashboard();
+  } catch (e) { location.href = "/login"; }
+})();
+document.getElementById("logout")?.addEventListener("click", async () => {
+  try { await fetch("/api/logout", { method: "POST" }); } catch (e) {}
+  location.href = "/login";
+});
+</script>
+</body>
+</html>
